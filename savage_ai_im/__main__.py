@@ -54,7 +54,7 @@ async def on_message(message: Message):
         (client.user.mentioned_in(message) and not message.mention_everyone)
     )
     if handle_message and message.author.id != client.user.id:
-        with message.channel.typing():
+        async with message.channel.typing():
             thread_id = message.author.id
             command_test_message = message.content.replace(client.user.mention, '').strip()
 

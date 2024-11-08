@@ -4,4 +4,3 @@ tests
 .gitignore
 gcp-creds.json
 poetry.toml
-README.md

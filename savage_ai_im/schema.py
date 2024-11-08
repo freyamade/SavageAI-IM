@@ -9,7 +9,22 @@ from enum import Enum
 from typing import Any, Dict, List, Optional
 from uuid import UUID
 
-from pydantic import AnyUrl, BaseModel, Field, conint, constr
+from pydantic import AnyUrl, BaseModel, Field, conint, constr, model_validator
+
+BIS_SLOTS = [
+    'mainhand',
+    'offhand',
+    'head',
+    'body',
+    'hands',
+    'legs',
+    'feet',
+    'earrings',
+    'necklace',
+    'bracelet',
+    'right_ring',
+    'left_ring',
+]
 
 
 class CharacterCollectionBISListSummary(BaseModel):
@@ -153,34 +168,67 @@ class TomeGreedGear(BaseModel):
     greed_lists: List[List[TomeGreedItem]]
 
 
+# class BISList(BaseModel):
+#     id: int = Field(description='The ID of the BISList. Can be used for further reads if needed.')
+#     bis_body: Gear = Field(description='Details about the gear that is best-in-slot for the `body` slot.')
+#     bis_bracelet: Gear = Field(description='Details about the gear that is best-in-slot for the `bracelet` slot.')
+#     bis_earrings: Gear = Field(description='Details about the gear that is best-in-slot for the `earrings` slot.')
+#     bis_feet: Gear = Field(description='Details about the gear that is best-in-slot for the `feet` slot.')
+#     bis_hands: Gear = Field(description='Details about the gear that is best-in-slot for the `hands` slot.')
+#     bis_head: Gear = Field(description='Details about the gear that is best-in-slot for the `head` slot.')
+#     bis_left_ring: Gear = Field(description='Details about the gear that is best-in-slot for the `left_ring` slot.')
+#     bis_legs: Gear = Field(description='Details about the gear that is best-in-slot for the `legs` slot.')
+#     bis_mainhand: Gear = Field(description='Details about the gear that is best-in-slot for the `mainhand` slot.')
+#     bis_necklace: Gear = Field(description='Details about the gear that is best-in-slot for the `necklace` slot.')
+#     bis_offhand: Gear = Field(description='Details about the gear that is best-in-slot for the `offhand` slot. Only relevant for Paladin Jobs.')
+#     bis_right_ring: Gear = Field(description='Details about the gear that is best-in-slot for the `right_ring` slot.')
+#     current_body: Gear = Field(description='Details about the gear that is currently equipped in the `body` slot. If the `name` does not match the `bis_body` field then this slot is not considered to be BIS.')
+#     current_bracelet: Gear = Field(description='Details about the gear that is currently equipped in the `bracelet` slot. If the `name` does not match the `bis_bracelet` field then this slot is not considered to be BIS.')
+#     current_earrings: Gear = Field(description='Details about the gear that is currently equipped in the `earrings` slot. If the `name` does not match the `bis_earrings` field then this slot is not considered to be BIS.')
+#     current_feet: Gear = Field(description='Details about the gear that is currently equipped in the `feet` slot. If the `name` does not match the `bis_feet` field then this slot is not considered to be BIS.')
+#     current_hands: Gear = Field(description='Details about the gear that is currently equipped in the `hands` slot. If the `name` does not match the `bis_hands` field then this slot is not considered to be BIS.')
+#     current_head: Gear = Field(description='Details about the gear that is currently equipped in the `head` slot. If the `name` does not match the `bis_head` field then this slot is not considered to be BIS.')
+#     current_left_ring: Gear = Field(description='Details about the gear that is currently equipped in the `left_ring` slot. If the `name` does not match the `bis_left_ring` field then this slot is not considered to be BIS.')
+#     current_legs: Gear = Field(description='Details about the gear that is currently equipped in the `legs` slot. If the `name` does not match the `bis_legs` field then this slot is not considered to be BIS.')
+#     current_mainhand: Gear = Field(description='Details about the gear that is currently equipped in the `mainhand` slot. If the `name` does not match the `bis_mainhand` field then this slot is not considered to be BIS.')
+#     current_necklace: Gear = Field(description='Details about the gear that is currently equipped in the `necklace` slot. If the `name` does not match the `bis_necklace` field then this slot is not considered to be BIS.')
+#     current_offhand: Gear = Field(description='Details about the gear that is currently equipped in the `offhand` slot. If the `name` does not match the `bis_offhand` field then this slot is not considered to be BIS. Only relevant for Paladin Jobs.')
+#     current_right_ring: Gear = Field(description='Details about the gear that is currently equipped in the `right_ring` slot. If the `name` does not match the `bis_right_ring` field then this slot is not considered to be BIS.')
+#     item_level: int = Field(description='The current average item level of the gear currently equipped in this BISList information.')
+#     job: Job = Field(description='Information about the Job that this BISList is for. If the `display_name` field is Paladin, then we want to include information about the `offhand` fields.')
+
+
+class BISSlotDetails(BaseModel):
+    bis: Gear = Field(description='The details of the best-in-slot gear for this slot.')
+    current: Gear = Field(description='The details of the current Gear for this slot.')
+
+
 class BISList(BaseModel):
     id: int = Field(description='The ID of the BISList. Can be used for further reads if needed.')
-    bis_body: Gear = Field(description='Details about the gear that is best-in-slot for the `body` slot.')
-    bis_bracelet: Gear = Field(description='Details about the gear that is best-in-slot for the `bracelet` slot.')
-    bis_earrings: Gear = Field(description='Details about the gear that is best-in-slot for the `earrings` slot.')
-    bis_feet: Gear = Field(description='Details about the gear that is best-in-slot for the `feet` slot.')
-    bis_hands: Gear = Field(description='Details about the gear that is best-in-slot for the `hands` slot.')
-    bis_head: Gear = Field(description='Details about the gear that is best-in-slot for the `head` slot.')
-    bis_left_ring: Gear = Field(description='Details about the gear that is best-in-slot for the `left_ring` slot.')
-    bis_legs: Gear = Field(description='Details about the gear that is best-in-slot for the `legs` slot.')
-    bis_mainhand: Gear = Field(description='Details about the gear that is best-in-slot for the `mainhand` slot.')
-    bis_necklace: Gear = Field(description='Details about the gear that is best-in-slot for the `necklace` slot.')
-    bis_offhand: Gear = Field(description='Details about the gear that is best-in-slot for the `offhand` slot. Only relevant for Paladin Jobs.')
-    bis_right_ring: Gear = Field(description='Details about the gear that is best-in-slot for the `right_ring` slot.')
-    current_body: Gear = Field(description='Details about the gear that is currently equipped in the `body` slot. If the `name` does not match the `bis_body` field then this slot is not considered to be BIS.')
-    current_bracelet: Gear = Field(description='Details about the gear that is currently equipped in the `bracelet` slot. If the `name` does not match the `bis_bracelet` field then this slot is not considered to be BIS.')
-    current_earrings: Gear = Field(description='Details about the gear that is currently equipped in the `earrings` slot. If the `name` does not match the `bis_earrings` field then this slot is not considered to be BIS.')
-    current_feet: Gear = Field(description='Details about the gear that is currently equipped in the `feet` slot. If the `name` does not match the `bis_feet` field then this slot is not considered to be BIS.')
-    current_hands: Gear = Field(description='Details about the gear that is currently equipped in the `hands` slot. If the `name` does not match the `bis_hands` field then this slot is not considered to be BIS.')
-    current_head: Gear = Field(description='Details about the gear that is currently equipped in the `head` slot. If the `name` does not match the `bis_head` field then this slot is not considered to be BIS.')
-    current_left_ring: Gear = Field(description='Details about the gear that is currently equipped in the `left_ring` slot. If the `name` does not match the `bis_left_ring` field then this slot is not considered to be BIS.')
-    current_legs: Gear = Field(description='Details about the gear that is currently equipped in the `legs` slot. If the `name` does not match the `bis_legs` field then this slot is not considered to be BIS.')
-    current_mainhand: Gear = Field(description='Details about the gear that is currently equipped in the `mainhand` slot. If the `name` does not match the `bis_mainhand` field then this slot is not considered to be BIS.')
-    current_necklace: Gear = Field(description='Details about the gear that is currently equipped in the `necklace` slot. If the `name` does not match the `bis_necklace` field then this slot is not considered to be BIS.')
-    current_offhand: Gear = Field(description='Details about the gear that is currently equipped in the `offhand` slot. If the `name` does not match the `bis_offhand` field then this slot is not considered to be BIS. Only relevant for Paladin Jobs.')
-    current_right_ring: Gear = Field(description='Details about the gear that is currently equipped in the `right_ring` slot. If the `name` does not match the `bis_right_ring` field then this slot is not considered to be BIS.')
+    body: BISSlotDetails = Field(description='BIS and Currently equipped information for the Gear in the `body` slot')
+    bracelet: BISSlotDetails = Field(description='BIS and Currently equipped information for the Gear in the `bracelet` slot')
+    earrings: BISSlotDetails = Field(description='BIS and Currently equipped information for the Gear in the `earrings` slot')
+    feet: BISSlotDetails = Field(description='BIS and Currently equipped information for the Gear in the `feet` slot')
+    hands: BISSlotDetails = Field(description='BIS and Currently equipped information for the Gear in the `hands` slot')
+    head: BISSlotDetails = Field(description='BIS and Currently equipped information for the Gear in the `head` slot')
+    left_ring: BISSlotDetails = Field(description='BIS and Currently equipped information for the Gear in the `left_ring` slot')
+    legs: BISSlotDetails = Field(description='BIS and Currently equipped information for the Gear in the `legs` slot')
+    mainhand: BISSlotDetails = Field(description='BIS and Currently equipped information for the Gear in the `mainhand` slot')
+    necklace: BISSlotDetails = Field(description='BIS and Currently equipped information for the Gear in the `necklace` slot')
+    offhand: BISSlotDetails = Field(description='BIS and Currently equipped information for the Gear in the `offhand` slot')
+    right_ring: BISSlotDetails = Field(description='BIS and Currently equipped information for the Gear in the `right_ring` slot')
     item_level: int = Field(description='The current average item level of the gear currently equipped in this BISList information.')
     job: Job = Field(description='Information about the Job that this BISList is for. If the `display_name` field is Paladin, then we want to include information about the `offhand` fields.')
+
+    @model_validator(mode="before")
+    @classmethod
+    def transform(cls, data: Any) -> Any:
+        # Need to iterate through bis_ and current_ slots, transforming the data into how we need it
+        for slot in BIS_SLOTS:
+            bis = data.pop(f'bis_{slot}')
+            current = data.pop(f'current_{slot}')
+            data[slot] = {'bis': bis, 'current': current}
+        return data
 
 
 class CharacterDetails(BaseModel):

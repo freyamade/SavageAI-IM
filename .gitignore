@@ -1,6 +1,8 @@
 gcp-creds.json
 logs/*
 db/*
+!logs/.keep
+!db/.keep
 
 # Created by https://www.toptal.com/developers/gitignore/api/python
 # Edit at https://www.toptal.com/developers/gitignore?templates=python

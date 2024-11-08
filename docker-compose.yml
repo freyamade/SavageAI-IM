@@ -1,0 +1,15 @@
+services:
+  savage_ai_im:
+    image: ghcr.io/freyamade/savageai-im/image:latest
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/gcp-creds.json
+      # - DISCORD_TOKEN=
+      # - SENTRY_DSN=
+      # - LANGCHAIN_TRACING_V2=
+      # - LANGCHAIN_ENDPOINT=
+      # - LANGCHAIN_API_KEY=
+      # - LANGCHAIN_PROJECT=
+    volumes:
+      - ./db:/savage_ai_im/db
+      - ./logs:/savage_ai_im/logs
+      - ./gcp-creds.json:/gcp-creds.json

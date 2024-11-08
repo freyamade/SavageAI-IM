@@ -1,0 +1,7 @@
+.venv
+tests
+.env
+.gitignore
+gcp-creds.json
+poetry.toml
+README.md

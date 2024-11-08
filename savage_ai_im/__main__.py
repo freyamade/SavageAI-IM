@@ -56,11 +56,12 @@ async def on_message(message: Message):
         thread_id = message.author.id
         username = message.author.display_name
         content = message.content.replace(client.user.mention, client.user.name)
-        response = pass_message_to_agent(thread_id, username, content)
+        with message.channel.typing():
+            response = pass_message_to_agent(thread_id, username, content)
 
-        if not response:
-            await message.reply('The request was sent but the Agent did not return any response', )
-        else:
-            await message.reply(response)
+            if not response:
+                await message.reply('The request was sent but the Agent did not return any response', )
+            else:
+                await message.reply(response)
 
 client.run(Settings.DISCORD_TOKEN, log_handler=handler, log_level=INFO, root_logger=True)

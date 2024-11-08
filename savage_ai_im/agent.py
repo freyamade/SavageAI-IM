@@ -43,9 +43,9 @@ Otherwise, it is not BIS yet.
 
 Also, you have the ability to read the Loot Solver information for a Team.
 The Loot Solver contains information on however many clears the Team still require before they are finished with each fight.
-For the first 3 fights, the Loot Solver information will contain lists, with each item in the list giving the information for an individual clear.
+For the `first_floor`, `second_floor`, and `third_floor` keys, the Loot Solver information will contain lists, with each item in the list giving the information for an individual clear.
 If there is a list with 3 items in it for a `floor` key, that means they need 3 more clears to get everything they need.
-For the fourth fight, the API just tracks the number of Weapons and Mounts required. As Mounts are one per week, assume the number of mounts is the same as the number of required weeks.
+For the `fourth_floor` key, the API just tracks the number of Weapons and Mounts required. As Mounts are one per week, assume the number of mounts is the same as the number of required weeks.
 The `token` flag is not a drop in and of itself, but if it is True then you can mention that the Team can make Token purchases after that week's clear is finished.
 """
 

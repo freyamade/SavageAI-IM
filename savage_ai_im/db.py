@@ -12,8 +12,7 @@ def reset_thread(thread_id: str):
     # try to delete the thread_id from the checkpoints and writes tables
     try:
         cursor.execute("DELETE FROM checkpoints WHERE thread_id = ?", (thread_id,))
-        cursor.execute("DELETE FROM checkpoint_writes WHERE thread_id = ?", (thread_id,))
-        cursor.execute("DELETE FROM checkpoint_blobs WHERE thread_id = ?", (thread_id,))
+        cursor.execute("DELETE FROM writes WHERE thread_id = ?", (thread_id,))
         connection.commit()
         return True
     except Exception as exception:

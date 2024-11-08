@@ -54,19 +54,21 @@ async def on_message(message: Message):
         (client.user.mentioned_in(message) and not message.mention_everyone)
     )
     if handle_message and message.author.id != client.user.id:
-        thread_id = message.author.id
-        command_test_message = message.content.replace(client.user.mention, '').strip()
+        with message.channel.typing():
+            thread_id = message.author.id
+            command_test_message = message.content.replace(client.user.mention, '').strip()
 
-        if command_test_message.startswith('!'):
-            # Run command
-            if command_test_message == '!clear':
-                # Clear the memory for the author
-                reset_thread(thread_id)
-
-        else:
-            username = message.author.display_name
-            content = message.content.replace(client.user.mention, client.user.name)
-            with message.channel.typing():
+            if command_test_message.startswith('!'):
+                # Run command
+                if command_test_message == '!clear':
+                    # Clear the memory for the author
+                    if reset_thread(thread_id):
+                        await message.reply('Done!')
+                    else:
+                        await message.reply('An error occurred when trying to reset your details!')
+            else:
+                username = message.author.display_name
+                content = message.content.replace(client.user.mention, client.user.name)
                 response = pass_message_to_agent(thread_id, username, content)
 
                 if not response:

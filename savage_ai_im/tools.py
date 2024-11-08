@@ -35,7 +35,7 @@ def fetch_loot_solver_information(api_key: str, team_id: UUID) -> LootSolverResp
     Retrieve the full suite of Loot Solver information for a given Team.
     Help the AI by replacing the IDs with Character Names
     """
-    team = fetch_single_savage_aim_team_details.invoke({'team_id': team_id})
+    team = fetch_single_savage_aim_team_details.invoke({'team_id': team_id, 'api_key': api_key})
     headers = {'Authorization': f'Token {api_key}'}
     response = requests.get(f'https://savageaim.com/backend/api/team/{team_id}/loot/solver/', headers=headers)
     if response.status_code != 200:

@@ -1,11 +1,11 @@
 from datetime import datetime
-import sqlite3
 from langchain_core.messages import HumanMessage
 from langgraph.checkpoint.sqlite import SqliteSaver
 from langgraph.prebuilt import create_react_agent
 from langchain_google_vertexai import ChatVertexAI
 from structlog import get_logger
 
+from .db import connection
 from .tools import fetch_loot_solver_information, fetch_savage_aim_teams, fetch_single_savage_aim_team_details
 
 
@@ -49,7 +49,7 @@ For the `fourth_floor` key, the API just tracks the number of Weapons and Mounts
 The `token` flag is not a drop in and of itself, but if it is True then you can mention that the Team can make Token purchases after that week's clear is finished.
 """
 
-connection = sqlite3.connect('db/db.sqlite3', check_same_thread=False)
+
 memory = SqliteSaver(connection)
 model = ChatVertexAI(model="gemini-1.5-flash")
 tools = [fetch_savage_aim_teams, fetch_single_savage_aim_team_details, fetch_loot_solver_information]

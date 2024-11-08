@@ -7,6 +7,7 @@ import sentry_sdk
 from discord import Client, Message, DMChannel
 # local
 from . import VERSION
+from .db import reset_thread
 from .settings import Settings
 from .agent import pass_message_to_agent
 
@@ -42,7 +43,7 @@ handler = TimedRotatingFileHandler(
 @client.event
 async def on_ready():
     print('Ready to go o7')
-    activity = discord.Game(f'Ping me to ask questions! (v{VERSION})')
+    activity = discord.Game(f'v{VERSION}')
     await client.change_presence(status=discord.Status.online, activity=activity)
 
 
@@ -54,14 +55,23 @@ async def on_message(message: Message):
     )
     if handle_message and message.author.id != client.user.id:
         thread_id = message.author.id
-        username = message.author.display_name
-        content = message.content.replace(client.user.mention, client.user.name)
-        with message.channel.typing():
-            response = pass_message_to_agent(thread_id, username, content)
+        command_test_message = message.content.replace(client.user.mention, '').strip()
 
-            if not response:
-                await message.reply('The request was sent but the Agent did not return any response', )
-            else:
-                await message.reply(response)
+        if command_test_message.startswith('!'):
+            # Run command
+            if command_test_message == '!clear':
+                # Clear the memory for the author
+                reset_thread(thread_id)
+
+        else:
+            username = message.author.display_name
+            content = message.content.replace(client.user.mention, client.user.name)
+            with message.channel.typing():
+                response = pass_message_to_agent(thread_id, username, content)
+
+                if not response:
+                    await message.reply('The request was sent but the Agent did not return any response', )
+                else:
+                    await message.reply(response)
 
 client.run(Settings.DISCORD_TOKEN, log_handler=handler, log_level=INFO, root_logger=True)

@@ -2,7 +2,7 @@ from uuid import UUID
 
 import requests
 from langchain_core.tools import tool
-from .schema import Team, LootSolverResponse
+from .schema import LootHistoryDetails, Team, LootSolverResponse
 
 
 @tool
@@ -54,3 +54,17 @@ def fetch_loot_solver_information(api_key: str, team_id: UUID) -> LootSolverResp
                     continue
                 week_data[slot] = name_map.get(week_data[slot], None)
     return LootSolverResponse(**details)
+
+
+@tool
+def fetch_team_loot_history(api_key: str, team_id: UUID) -> LootHistoryDetails:
+    """
+    Retrieve a list of all of the Loot items retrieved over the course of the Tier a Team is currently progressing.
+    """
+    headers = {'Authorization': f'Token {api_key}'}
+    response = requests.get(f'https://savageaim.com/backend/api/team/{team_id}/loot/', headers=headers)
+    if response.status_code != 200:
+        raise Exception(f'An error occurred ({response.status_code}): {response.text}')
+
+    return LootHistoryDetails(**response.json().get('loot', {}))
+

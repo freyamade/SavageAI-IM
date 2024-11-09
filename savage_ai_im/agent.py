@@ -6,7 +6,7 @@ from langchain_google_vertexai import ChatVertexAI
 from structlog import get_logger
 
 from .db import connection
-from .tools import fetch_loot_solver_information, fetch_savage_aim_teams, fetch_single_savage_aim_team_details
+from .tools import fetch_loot_solver_information, fetch_savage_aim_teams, fetch_single_savage_aim_team_details, fetch_team_loot_history
 
 
 SYSTEM_PROMPT = """
@@ -53,7 +53,14 @@ The `token` flag is not a drop in and of itself, but if it is True then you can 
 
 memory = SqliteSaver(connection)
 model = ChatVertexAI(model="gemini-1.5-flash")
-tools = [fetch_savage_aim_teams, fetch_single_savage_aim_team_details, fetch_loot_solver_information]
+
+tools = [
+    fetch_savage_aim_teams,
+    fetch_single_savage_aim_team_details, 
+    fetch_loot_solver_information,
+    fetch_team_loot_history,
+]
+
 agent_executor = create_react_agent(
     model,
     tools,

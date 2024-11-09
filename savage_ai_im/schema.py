@@ -28,60 +28,59 @@ BIS_SLOTS = [
 
 
 class CharacterCollectionBISListSummary(BaseModel):
-    id: int = Field(description='The ID of the BISList, can be used to read it if needed.')
-    name: str = Field(description='The Name of the BIS List')
+    id: int = Field(..., description='The ID of the BISList, can be used to read it if needed.')
+    name: str = Field(..., description='The Name of the BIS List')
 
 
 class Gear(BaseModel):
-    item_level: int = Field(description='The Item Level of the Gear variety.')
-    name: str = Field(description='The name of the Gear variety')
+    item_level: int = Field(..., description='The Item Level of the Gear variety.')
+    name: str = Field(..., description='The name of the Gear variety')
 
 
 class Loot(BaseModel):
-    id: int
     item: str = Field(
         ...,
-        description='Turn the stored item field into a nice text display;\n    - Capitalised words\n    - Remove hyphens',
+        description='The name of the Item that was received.',
     )
     member: str = Field(
         ...,
-        description="We only need a name for the Member in the history so we'll get one",
+        description="The name of the Team Member who received the Item.",
     )
-    greed: Optional[bool] = None
-    obtained: date
+    greed: bool = Field(..., description='A flag stating whether the drop was awarded as "Need" (if False), meaning it was for their main BIS List, or "Greed" (if True), meaning it was not.')
+    obtained: date = Field(..., description='The Date that the item was received on.')
 
 
 class LootReceivedEntry(BaseModel):
-    need: int
-    greed: int
+    need: int = Field(..., description='The number of Need items the Team Member has retrieved in this Tier')
+    greed: int = Field(..., description='The number of Greed items the Team Member has retrieved in this Tier')
 
 
 class LootSolverFirstFloorResponse(BaseModel):
-    earrings: Optional[str] = Field(alias='Earrings', description='The Name of the Team Member who is set to receive the Earrings drop for this week. If the value is None, then nobody needs the drop for this week.')
-    necklace: Optional[str] = Field(alias='Necklace', description='The Name of the Team Member who is set to receive the Necklace drop for this week. If the value is None, then nobody needs the drop for this week.')
-    bracelet: Optional[str] = Field(alias='Bracelet', description='The Name of the Team Member who is set to receive the Bracelet drop for this week. If the value is None, then nobody needs the drop for this week.')
-    ring: Optional[str] = Field(alias='Ring', description='The Name of the Team Member who is set to receive the Ring drop for this week. If the value is None, then nobody needs the drop for this week.')
-    token: bool = Field(description='A flag indicating if the Team should have enough tokens after this kill for the Members to be able to buy pieces that they need.')
+    earrings: Optional[str] = Field(..., alias='Earrings', description='The Name of the Team Member who is set to receive the Earrings drop for this week. If the value is None, then nobody needs the drop for this week.')
+    necklace: Optional[str] = Field(..., alias='Necklace', description='The Name of the Team Member who is set to receive the Necklace drop for this week. If the value is None, then nobody needs the drop for this week.')
+    bracelet: Optional[str] = Field(..., alias='Bracelet', description='The Name of the Team Member who is set to receive the Bracelet drop for this week. If the value is None, then nobody needs the drop for this week.')
+    ring: Optional[str] = Field(..., alias='Ring', description='The Name of the Team Member who is set to receive the Ring drop for this week. If the value is None, then nobody needs the drop for this week.')
+    token: bool = Field(..., description='A flag indicating if the Team should have enough tokens after this kill for the Members to be able to buy pieces that they need.')
 
 
 class LootSolverFourthFloorResponse(BaseModel):
-    weapons: int = Field(description='The number of weapons required before all of the TeamMembers have their raid weapons.')
-    mounts: int = Field(description='The number of mounts required before everyone in the Team has received one.')
+    weapons: int = Field(..., description='The number of weapons required before all of the TeamMembers have their raid weapons.')
+    mounts: int = Field(..., description='The number of mounts required before everyone in the Team has received one.')
 
 
 class LootSolverSecondFloorResponse(BaseModel):
-    head: Optional[str] = Field(alias='Head', description='The Name of the Team Member who is set to receive the Head drop for this week. If the value is None, then nobody needs the drop for this week.')
-    hands: Optional[str] = Field(alias='Hands', description='The Name of the Team Member who is set to receive the Hands drop for this week. If the value is None, then nobody needs the drop for this week.')
-    feet: Optional[str] = Field(alias='Feet', description='The Name of the Team Member who is set to receive the Feet drop for this week. If the value is None, then nobody needs the drop for this week.')
+    head: Optional[str] = Field(..., alias='Head', description='The Name of the Team Member who is set to receive the Head drop for this week. If the value is None, then nobody needs the drop for this week.')
+    hands: Optional[str] = Field(..., alias='Hands', description='The Name of the Team Member who is set to receive the Hands drop for this week. If the value is None, then nobody needs the drop for this week.')
+    feet: Optional[str] = Field(..., alias='Feet', description='The Name of the Team Member who is set to receive the Feet drop for this week. If the value is None, then nobody needs the drop for this week.')
     tome_accessory_augment: Optional[str] = Field(..., alias='Tome Accessory Augment', description='The Name of the Team Member who is set to receive the tome-accessory-augment drop for this week. If the value is None, then nobody needs the drop for this week.')
-    token: bool = Field(description='A flag indicating if the Team should have enough tokens after this kill for the Members to be able to buy pieces that they need.')
+    token: bool = Field(..., description='A flag indicating if the Team should have enough tokens after this kill for the Members to be able to buy pieces that they need.')
 
 
 class LootSolverThirdFloorResponse(BaseModel):
-    body: Optional[str] = Field(alias='Body', description='The Name of the Team Member who is set to receive the Body drop for this week. If the value is None, then nobody needs the drop for this week.')
-    legs: Optional[str] = Field(alias='Legs', description='The Name of the Team Member who is set to receive the Legs drop for this week. If the value is None, then nobody needs the drop for this week.')
+    body: Optional[str] = Field(..., alias='Body', description='The Name of the Team Member who is set to receive the Body drop for this week. If the value is None, then nobody needs the drop for this week.')
+    legs: Optional[str] = Field(..., alias='Legs', description='The Name of the Team Member who is set to receive the Legs drop for this week. If the value is None, then nobody needs the drop for this week.')
     tome_armour_augment: Optional[str] = Field(..., alias='Tome Armour Augment', description='The Name of the Team Member who is set to receive the tome-armour-augment drop for this week. If the value is None, then nobody needs the drop for this week.')
-    token: bool = Field(description='A flag indicating if the Team should have enough tokens after this kill for the Members to be able to buy pieces that they need.')
+    token: bool = Field(..., description='A flag indicating if the Team should have enough tokens after this kill for the Members to be able to buy pieces that they need.')
 
 
 class NeedGear(BaseModel):
@@ -101,8 +100,8 @@ class RoleEnum(Enum):
 
 class Tier(BaseModel):
     fights: Optional[List[str]] = Field(None, description='A list of names for the fights in the Tier. There are almost always 4.')
-    max_item_level: int = Field(description='The highest Item Level that the Tier has Gear for')
-    name: str = Field(description='The name of the Tier.')
+    max_item_level: int = Field(..., description='The highest Item Level that the Tier has Gear for')
+    name: str = Field(..., description='The name of the Tier.')
 
 
 class TomeGreedItem(BaseModel):
@@ -121,9 +120,9 @@ class TomeNeedGear(BaseModel):
 
 
 class CharacterCollection(BaseModel):
-    id: int = Field(description='The Character ID, which can be used to send further requests if needed')
-    bis_lists: List[CharacterCollectionBISListSummary] = Field(description='A summary list of the BIS Lists the Character has, without all of the data about the BISList.')
-    name: str = Field(description="The Character's name.")
+    id: int = Field(..., description='The Character ID, which can be used to send further requests if needed')
+    bis_lists: List[CharacterCollectionBISListSummary] = Field(..., description='A summary list of the BIS Lists the Character has, without all of the data about the BISList.')
+    name: str = Field(..., description="The Character's name.")
 
 
 class GreedGear(BaseModel):
@@ -133,28 +132,27 @@ class GreedGear(BaseModel):
 
 
 class Job(BaseModel):
-    display_name: str = Field(description='The name of the Job used for display purposes')
-    role: RoleEnum = Field(description='The role that the job falls under (tank, healer, dps)')
-
-
-class LootReceived(BaseModel):
-    field_member_name__str_: LootReceivedEntry = Field(..., alias='[member_name: str]')
+    display_name: str = Field(..., description='The name of the Job used for display purposes')
+    role: RoleEnum = Field(..., description='The role that the job falls under (tank, healer, dps)')
 
 
 class LootSolverResponse(BaseModel):
     first_floor: List[LootSolverFirstFloorResponse] = Field(
+        ...,
         description='Information about Loot Distributions planned for the Team for their remaining clears of the first fight of their current Tier.'
         ' Each item in the list corresponds with the loot to be handed out every week, with a token flag to determine if the Members will be able to purchase items from the shop after the clear.',
     )
     second_floor: List[LootSolverSecondFloorResponse] = Field(
+        ...,
         description='Information about Loot Distributions planned for the Team for their remaining clears of the second fight of their current Tier.'
         ' Each item in the list corresponds with the loot to be handed out every week, with a token flag to determine if the Members will be able to purchase items from the shop after the clear.',
     )
     third_floor: List[LootSolverThirdFloorResponse] = Field(
+        ...,
         description='Information about Loot Distributions planned for the Team for their remaining clears of the third fight of their current Tier.'
         ' Each item in the list corresponds with the loot to be handed out every week, with a token flag to determine if the Members will be able to purchase items from the shop after the clear.',
     )
-    fourth_floor: LootSolverFourthFloorResponse = Field(description='Information about how many Weapon (Mainhand) drops, and how many mounts, are still required to be done with the fourth fight of the current Tier. As there is a hard limit of 1 mount per week, we can consider the number of mounts remaining to be the number of weeks required.')
+    fourth_floor: LootSolverFourthFloorResponse = Field(..., description='Information about how many Weapon (Mainhand) drops, and how many mounts, are still required to be done with the fourth fight of the current Tier. As there is a hard limit of 1 mount per week, we can consider the number of mounts remaining to be the number of weeks required.')
 
 
 class RaidRequiredData(BaseModel):
@@ -169,56 +167,56 @@ class TomeGreedGear(BaseModel):
 
 
 # class BISList(BaseModel):
-#     id: int = Field(description='The ID of the BISList. Can be used for further reads if needed.')
-#     bis_body: Gear = Field(description='Details about the gear that is best-in-slot for the `body` slot.')
-#     bis_bracelet: Gear = Field(description='Details about the gear that is best-in-slot for the `bracelet` slot.')
-#     bis_earrings: Gear = Field(description='Details about the gear that is best-in-slot for the `earrings` slot.')
-#     bis_feet: Gear = Field(description='Details about the gear that is best-in-slot for the `feet` slot.')
-#     bis_hands: Gear = Field(description='Details about the gear that is best-in-slot for the `hands` slot.')
-#     bis_head: Gear = Field(description='Details about the gear that is best-in-slot for the `head` slot.')
-#     bis_left_ring: Gear = Field(description='Details about the gear that is best-in-slot for the `left_ring` slot.')
-#     bis_legs: Gear = Field(description='Details about the gear that is best-in-slot for the `legs` slot.')
-#     bis_mainhand: Gear = Field(description='Details about the gear that is best-in-slot for the `mainhand` slot.')
-#     bis_necklace: Gear = Field(description='Details about the gear that is best-in-slot for the `necklace` slot.')
-#     bis_offhand: Gear = Field(description='Details about the gear that is best-in-slot for the `offhand` slot. Only relevant for Paladin Jobs.')
-#     bis_right_ring: Gear = Field(description='Details about the gear that is best-in-slot for the `right_ring` slot.')
-#     current_body: Gear = Field(description='Details about the gear that is currently equipped in the `body` slot. If the `name` does not match the `bis_body` field then this slot is not considered to be BIS.')
-#     current_bracelet: Gear = Field(description='Details about the gear that is currently equipped in the `bracelet` slot. If the `name` does not match the `bis_bracelet` field then this slot is not considered to be BIS.')
-#     current_earrings: Gear = Field(description='Details about the gear that is currently equipped in the `earrings` slot. If the `name` does not match the `bis_earrings` field then this slot is not considered to be BIS.')
-#     current_feet: Gear = Field(description='Details about the gear that is currently equipped in the `feet` slot. If the `name` does not match the `bis_feet` field then this slot is not considered to be BIS.')
-#     current_hands: Gear = Field(description='Details about the gear that is currently equipped in the `hands` slot. If the `name` does not match the `bis_hands` field then this slot is not considered to be BIS.')
-#     current_head: Gear = Field(description='Details about the gear that is currently equipped in the `head` slot. If the `name` does not match the `bis_head` field then this slot is not considered to be BIS.')
-#     current_left_ring: Gear = Field(description='Details about the gear that is currently equipped in the `left_ring` slot. If the `name` does not match the `bis_left_ring` field then this slot is not considered to be BIS.')
-#     current_legs: Gear = Field(description='Details about the gear that is currently equipped in the `legs` slot. If the `name` does not match the `bis_legs` field then this slot is not considered to be BIS.')
-#     current_mainhand: Gear = Field(description='Details about the gear that is currently equipped in the `mainhand` slot. If the `name` does not match the `bis_mainhand` field then this slot is not considered to be BIS.')
-#     current_necklace: Gear = Field(description='Details about the gear that is currently equipped in the `necklace` slot. If the `name` does not match the `bis_necklace` field then this slot is not considered to be BIS.')
-#     current_offhand: Gear = Field(description='Details about the gear that is currently equipped in the `offhand` slot. If the `name` does not match the `bis_offhand` field then this slot is not considered to be BIS. Only relevant for Paladin Jobs.')
-#     current_right_ring: Gear = Field(description='Details about the gear that is currently equipped in the `right_ring` slot. If the `name` does not match the `bis_right_ring` field then this slot is not considered to be BIS.')
-#     item_level: int = Field(description='The current average item level of the gear currently equipped in this BISList information.')
-#     job: Job = Field(description='Information about the Job that this BISList is for. If the `display_name` field is Paladin, then we want to include information about the `offhand` fields.')
+#     id: int = Field(..., description='The ID of the BISList. Can be used for further reads if needed.')
+#     bis_body: Gear = Field(..., description='Details about the gear that is best-in-slot for the `body` slot.')
+#     bis_bracelet: Gear = Field(..., description='Details about the gear that is best-in-slot for the `bracelet` slot.')
+#     bis_earrings: Gear = Field(..., description='Details about the gear that is best-in-slot for the `earrings` slot.')
+#     bis_feet: Gear = Field(..., description='Details about the gear that is best-in-slot for the `feet` slot.')
+#     bis_hands: Gear = Field(..., description='Details about the gear that is best-in-slot for the `hands` slot.')
+#     bis_head: Gear = Field(..., description='Details about the gear that is best-in-slot for the `head` slot.')
+#     bis_left_ring: Gear = Field(..., description='Details about the gear that is best-in-slot for the `left_ring` slot.')
+#     bis_legs: Gear = Field(..., description='Details about the gear that is best-in-slot for the `legs` slot.')
+#     bis_mainhand: Gear = Field(..., description='Details about the gear that is best-in-slot for the `mainhand` slot.')
+#     bis_necklace: Gear = Field(..., description='Details about the gear that is best-in-slot for the `necklace` slot.')
+#     bis_offhand: Gear = Field(..., description='Details about the gear that is best-in-slot for the `offhand` slot. Only relevant for Paladin Jobs.')
+#     bis_right_ring: Gear = Field(..., description='Details about the gear that is best-in-slot for the `right_ring` slot.')
+#     current_body: Gear = Field(..., description='Details about the gear that is currently equipped in the `body` slot. If the `name` does not match the `bis_body` field then this slot is not considered to be BIS.')
+#     current_bracelet: Gear = Field(..., description='Details about the gear that is currently equipped in the `bracelet` slot. If the `name` does not match the `bis_bracelet` field then this slot is not considered to be BIS.')
+#     current_earrings: Gear = Field(..., description='Details about the gear that is currently equipped in the `earrings` slot. If the `name` does not match the `bis_earrings` field then this slot is not considered to be BIS.')
+#     current_feet: Gear = Field(..., description='Details about the gear that is currently equipped in the `feet` slot. If the `name` does not match the `bis_feet` field then this slot is not considered to be BIS.')
+#     current_hands: Gear = Field(..., description='Details about the gear that is currently equipped in the `hands` slot. If the `name` does not match the `bis_hands` field then this slot is not considered to be BIS.')
+#     current_head: Gear = Field(..., description='Details about the gear that is currently equipped in the `head` slot. If the `name` does not match the `bis_head` field then this slot is not considered to be BIS.')
+#     current_left_ring: Gear = Field(..., description='Details about the gear that is currently equipped in the `left_ring` slot. If the `name` does not match the `bis_left_ring` field then this slot is not considered to be BIS.')
+#     current_legs: Gear = Field(..., description='Details about the gear that is currently equipped in the `legs` slot. If the `name` does not match the `bis_legs` field then this slot is not considered to be BIS.')
+#     current_mainhand: Gear = Field(..., description='Details about the gear that is currently equipped in the `mainhand` slot. If the `name` does not match the `bis_mainhand` field then this slot is not considered to be BIS.')
+#     current_necklace: Gear = Field(..., description='Details about the gear that is currently equipped in the `necklace` slot. If the `name` does not match the `bis_necklace` field then this slot is not considered to be BIS.')
+#     current_offhand: Gear = Field(..., description='Details about the gear that is currently equipped in the `offhand` slot. If the `name` does not match the `bis_offhand` field then this slot is not considered to be BIS. Only relevant for Paladin Jobs.')
+#     current_right_ring: Gear = Field(..., description='Details about the gear that is currently equipped in the `right_ring` slot. If the `name` does not match the `bis_right_ring` field then this slot is not considered to be BIS.')
+#     item_level: int = Field(..., description='The current average item level of the gear currently equipped in this BISList information.')
+#     job: Job = Field(..., description='Information about the Job that this BISList is for. If the `display_name` field is Paladin, then we want to include information about the `offhand` fields.')
 
 
 class BISSlotDetails(BaseModel):
-    bis: Gear = Field(description='The details of the best-in-slot gear for this slot.')
-    current: Gear = Field(description='The details of the current Gear for this slot.')
+    bis: Gear = Field(..., description='The details of the best-in-slot gear for this slot.')
+    current: Gear = Field(..., description='The details of the current Gear for this slot.')
 
 
 class BISList(BaseModel):
-    id: int = Field(description='The ID of the BISList. Can be used for further reads if needed.')
-    body: BISSlotDetails = Field(description='BIS and Currently equipped information for the Gear in the `body` slot')
-    bracelet: BISSlotDetails = Field(description='BIS and Currently equipped information for the Gear in the `bracelet` slot')
-    earrings: BISSlotDetails = Field(description='BIS and Currently equipped information for the Gear in the `earrings` slot')
-    feet: BISSlotDetails = Field(description='BIS and Currently equipped information for the Gear in the `feet` slot')
-    hands: BISSlotDetails = Field(description='BIS and Currently equipped information for the Gear in the `hands` slot')
-    head: BISSlotDetails = Field(description='BIS and Currently equipped information for the Gear in the `head` slot')
-    left_ring: BISSlotDetails = Field(description='BIS and Currently equipped information for the Gear in the `left_ring` slot')
-    legs: BISSlotDetails = Field(description='BIS and Currently equipped information for the Gear in the `legs` slot')
-    mainhand: BISSlotDetails = Field(description='BIS and Currently equipped information for the Gear in the `mainhand` slot')
-    necklace: BISSlotDetails = Field(description='BIS and Currently equipped information for the Gear in the `necklace` slot')
-    offhand: BISSlotDetails = Field(description='BIS and Currently equipped information for the Gear in the `offhand` slot')
-    right_ring: BISSlotDetails = Field(description='BIS and Currently equipped information for the Gear in the `right_ring` slot')
-    item_level: int = Field(description='The current average item level of the gear currently equipped in this BISList information.')
-    job: Job = Field(description='Information about the Job that this BISList is for. If the `display_name` field is Paladin, then we want to include information about the `offhand` fields.')
+    id: int = Field(..., description='The ID of the BISList. Can be used for further reads if needed.')
+    body: BISSlotDetails = Field(..., description='BIS and Currently equipped information for the Gear in the `body` slot')
+    bracelet: BISSlotDetails = Field(..., description='BIS and Currently equipped information for the Gear in the `bracelet` slot')
+    earrings: BISSlotDetails = Field(..., description='BIS and Currently equipped information for the Gear in the `earrings` slot')
+    feet: BISSlotDetails = Field(..., description='BIS and Currently equipped information for the Gear in the `feet` slot')
+    hands: BISSlotDetails = Field(..., description='BIS and Currently equipped information for the Gear in the `hands` slot')
+    head: BISSlotDetails = Field(..., description='BIS and Currently equipped information for the Gear in the `head` slot')
+    left_ring: BISSlotDetails = Field(..., description='BIS and Currently equipped information for the Gear in the `left_ring` slot')
+    legs: BISSlotDetails = Field(..., description='BIS and Currently equipped information for the Gear in the `legs` slot')
+    mainhand: BISSlotDetails = Field(..., description='BIS and Currently equipped information for the Gear in the `mainhand` slot')
+    necklace: BISSlotDetails = Field(..., description='BIS and Currently equipped information for the Gear in the `necklace` slot')
+    offhand: BISSlotDetails = Field(..., description='BIS and Currently equipped information for the Gear in the `offhand` slot')
+    right_ring: BISSlotDetails = Field(..., description='BIS and Currently equipped information for the Gear in the `right_ring` slot')
+    item_level: int = Field(..., description='The current average item level of the gear currently equipped in this BISList information.')
+    job: Job = Field(..., description='Information about the Job that this BISList is for. If the `display_name` field is Paladin, then we want to include information about the `offhand` fields.')
 
     @model_validator(mode="before")
     @classmethod
@@ -244,9 +242,9 @@ class CharacterDetails(BaseModel):
 
 
 class TeamMember(BaseModel):
-    id: int = Field(description='The ID of the TeamMember. Used to cross-reference with LootSolver information.')
-    bis_list: BISList = Field(description='The BISList information related to what the TeamMember is playing as their main role in the Team.')
-    character: CharacterCollection = Field(description='The information about the Character that is playing in the Team.')
+    id: int = Field(..., description='The ID of the TeamMember. Used to cross-reference with LootSolver information.')
+    bis_list: BISList = Field(..., description='The BISList information related to what the TeamMember is playing as their main role in the Team.')
+    character: CharacterCollection = Field(..., description='The information about the Character that is playing in the Team.')
 
 
 class TomeAugmentRequiredData(BaseModel):
@@ -277,17 +275,17 @@ class LootGearRequiredResponse(BaseModel):
     tome_weapon_augment: RaidRequiredData = Field(..., alias='tome-weapon-augment')
 
 
-class LootListResponse(BaseModel):
-    history: List[Loot]
-    received: LootReceived
-    gear: LootGearRequiredResponse
+class LootHistoryDetails(BaseModel):
+    history: List[Loot] = Field(..., description='A list of Loot items received by the Members of the Team over the current Tier. The returned list is ordered in descending order of retrieved date, which is to say, the most recent Loot items are at the beginning of the list.')
+    received: dict[str, LootReceivedEntry] = Field(..., description='A dictionary mapping Team Member Names to information about how many items they have received in the current Tier.')
+    # gear: LootGearRequiredResponse
 
 
 class Team(BaseModel):
-    id: UUID = Field(description='The ID of the Team. Used to read the information about the Team in tools.')
-    members: List[TeamMember] = Field(description='Information about the Members of the Team.')
-    tier: Tier = Field(description='Information about the Tier the Team is currently progressing.')
-    name: str = Field(description='The name of the Team.')
+    id: UUID = Field(..., description='The ID of the Team. Used to read the information about the Team in tools.')
+    members: List[TeamMember] = Field(..., description='Information about the Members of the Team.')
+    tier: Tier = Field(..., description='Information about the Tier the Team is currently progressing.')
+    name: str = Field(..., description='The name of the Team.')
 
 
 class ProxyMemberReadResponse(BaseModel):

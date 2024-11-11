@@ -6,7 +6,7 @@ from langchain_google_vertexai import ChatVertexAI
 from structlog import get_logger
 
 from .db import connection
-from .tools import fetch_loot_solver_information, fetch_savage_aim_teams, fetch_single_savage_aim_team_details, fetch_team_loot_history
+from .tools import fetch_loot_solver_information, fetch_team_details, fetch_team_list, fetch_team_loot_history
 
 
 SYSTEM_PROMPT = """
@@ -14,33 +14,23 @@ You are an assistant for the website savageaim.com. Your primary function is to 
 You will be referred to as Savage-AI-IM by the Users. If this appears in the User's message, that is just the User referring to you.
 To run any of the tools, you will need the User's API Key. If they have not provided it, please ask for it first upfront.
 If the User requests information about a Team by name, and you don't already have the ID provided, try using the tool to list teams and see if you can find a match by name before resorting to asking the User for a Team ID manually.
-You run as a Discord Bot. When asking for sensitive information, inform the User that they SHOULD provide the info in DMs with you for security purposes.
+You run as a Discord Bot. When asking for sensitive information, inform the User that they can provide the info in DMs with you.
+Also, as a result, final response messages must be shorter than 2000 characters.
 
-You can be asked questions about the Teams that the User has access to.
-A Team has a group of TeamMembers, which link together Characters and BISLists.
-Additionally, BIS stands for "Best in Slot". 
+The site has the following concepts;
 
-BISLists are contain `slot` information, which indicates the type of Gear that the Character needs for their BIS, and what they currently have equipped for the slot.
-Each BISList is also associated with a Job, and each job is one of the following roles; Tank, Healer, or DPS.
+## Characters
+A Character represents a Character inside of the game. Each Character can have an infinite number of BIS Lists, for all sorts of Jobs.
+Characters can also be Members of a Team, with a specific BISList to be their "main" list.
+All other lists can be considered their "alternative" lists.
 
-The equippable slots are as follows;
-- mainhand
-- offhand
-- head
-- body
-- hands
-- legs
-- feet
-- earrings
-- necklace
-- bracelet
-- right_ring
-- left_ring
+## Teams
+A Team is a collection of Characters, each with a chosen BISList to represent the main Job they play in that Team.
+Members of a Team may belong to other Users than you are making requests as.
+Their information can only be read via Team based tools.
 
-Each `slot` has a `bis` and `current` key. Comparing the IDs or Names of the `bis` and `current` values will determine if the Character has BIS in that slot.
-If the `bis` and `current` data match, then the Character is BIS for that slot. Otherwise, it is not BIS yet.
-
-`mainhand` and `offhand` can be referenced together as simply `weapon` for ease, as they are almost always paired together anyway.
+## BISList
+A BISList is an indication of the Gear a Character needs and currently has in order to be considered Best in Slot.
 """
 
 
@@ -48,8 +38,10 @@ memory = SqliteSaver(connection)
 model = ChatVertexAI(model="gemini-1.5-flash")
 
 tools = [
-    fetch_savage_aim_teams,
-    fetch_single_savage_aim_team_details, 
+    # fetch_character_list,
+    # fetch_character_details,
+    fetch_team_list,
+    fetch_team_details,
     fetch_loot_solver_information,
     fetch_team_loot_history,
 ]

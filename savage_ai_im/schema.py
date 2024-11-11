@@ -121,7 +121,7 @@ class TomeNeedGear(BaseModel):
 
 class CharacterCollection(BaseModel):
     id: int = Field(..., description='The Character ID, which can be used to send further requests if needed')
-    bis_lists: List[CharacterCollectionBISListSummary] = Field(..., description='A summary list of the BIS Lists the Character has, without all of the data about the BISList.')
+    # bis_lists: List[CharacterCollectionBISListSummary] = Field(..., description='A summary list of the BIS Lists the Character has, without all of the data about the BISList.')
     name: str = Field(..., description="The Character's name.")
 
 
@@ -202,6 +202,31 @@ class BISSlotDetails(BaseModel):
 
 
 class BISList(BaseModel):
+    """
+    BIS stands for "Best in Slot".
+    BISLists contain `slot` information, which indicates the type of Gear that the Character needs for their BIS, and what they currently have equipped for the slot.
+    Each BISList is also associated with a Job, and each job is one of the following roles; Tank, Healer, or DPS.
+
+    The equippable slots are as follows;
+    - mainhand
+    - offhand
+    - head
+    - body
+    - hands
+    - legs
+    - feet
+    - earrings
+    - necklace
+    - bracelet
+    - right_ring
+    - left_ring
+
+    Each `slot` has a `bis` and `current` key. Comparing the IDs or Names of the `bis` and `current` values will determine if the Character has BIS in that slot.
+    If the `bis` and `current` data match, then the Character is BIS for that slot. Otherwise, it is not BIS yet.
+
+    `mainhand` and `offhand` can be referenced together as simply `weapon` for ease, as they are almost always paired together anyway.
+    """
+
     id: int = Field(..., description='The ID of the BISList. Can be used for further reads if needed.')
     body: BISSlotDetails = Field(..., description='BIS and Currently equipped information for the Gear in the `body` slot')
     bracelet: BISSlotDetails = Field(..., description='BIS and Currently equipped information for the Gear in the `bracelet` slot')
@@ -230,15 +255,12 @@ class BISList(BaseModel):
 
 
 class CharacterDetails(BaseModel):
-    id: int
-    bis_lists: List[BISList]
-    alias: Optional[constr(max_length=64)] = None
-    avatar_url: AnyUrl
-    lodestone_id: str
-    name: constr(max_length=60)
-    token: constr(max_length=40)
-    verified: Optional[bool] = None
-    world: constr(max_length=60)
+    bis_lists: List[BISList] = Field(..., description='All of the BISLists that belong to the Character')
+    alias: Optional[str] = Field(None, description='A User-specified Alias for the Character. Completely optional.')
+    avatar_url: AnyUrl = Field(..., description='A URL for an image of the Character.')
+    lodestone_id: str = Field(..., description='The ID of the Character on Lodestone. A Character\'s Lodestone page can be referenced by https://eu.finalfantasyxiv.com/lodestone/character/{lodestone_id}/')
+    name: str = Field(..., description='The name of the Character.')
+    world: str = Field(..., description='The world that the Character exists on.')
 
 
 class TeamMember(BaseModel):

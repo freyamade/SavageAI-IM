@@ -2,11 +2,38 @@ from uuid import UUID
 
 import requests
 from langchain_core.tools import tool
-from .schema import LootHistoryDetails, Team, LootSolverResponse
+from .schema import CharacterCollection, CharacterDetails, LootHistoryDetails, Team, LootSolverResponse
+
+
+# @tool
+# def fetch_character_list(api_key: str) -> list[CharacterCollection]:
+#     """
+#     Retrieves the basic information about all of the Characters the User has access to.
+#     Characters not in this list do not belong to the User, and therefore can only be read through the Team tools.
+#     """
+#     headers = {'Authorization': f'Token {api_key}'}
+#     response = requests.get('https://savageaim.com/backend/api/character/', headers=headers)
+#     if response.status_code != 200:
+#         raise Exception(f'An error occurred ({response.status_code}): {response.text}')
+#     return [CharacterCollection(**c) for c in response.json()]
+
+
+# @tool
+# def fetch_character_details(api_key: str, character_id: int) -> CharacterDetails:
+#     """
+#     Retrieve the full suite of information about a specific Character based on its ID.
+#     You can only use this tool to read the information about the User's Characters.
+#     Information about Characters sharing a Team with the User can only be received through the Team Details tool.
+#     """
+#     headers = {'Authorization': f'Token {api_key}'}
+#     response = requests.get(f'https://savageaim.com/backend/api/character/{character_id}/', headers=headers)
+#     if response.status_code != 200:
+#         raise Exception(f'An error occurred ({response.status_code}): {response.text}')
+#     return CharacterDetails(**response.json())
 
 
 @tool
-def fetch_savage_aim_teams(api_key: str) -> list[Team]:
+def fetch_team_list(api_key: str) -> list[Team]:
     """
     Fetch a list of all of the Team objects.
     When asked about Teams by name, try running this tool to get all of the User's Teams and from there you can determine IDs.
@@ -19,7 +46,7 @@ def fetch_savage_aim_teams(api_key: str) -> list[Team]:
 
 
 @tool
-def fetch_single_savage_aim_team_details(api_key: str, team_id: UUID) -> Team:
+def fetch_team_details(api_key: str, team_id: UUID) -> Team:
     """
     Fetch the data of a single Team, referenced by its ID.
     """
@@ -40,7 +67,7 @@ def fetch_loot_solver_information(api_key: str, team_id: UUID) -> LootSolverResp
     For the `fourth_floor` key, the API just tracks the number of Weapons and Mounts required. As Mounts are one per week, assume the number of mounts is the same as the number of required weeks.
     The `token` flag is not a drop in and of itself, but if it is True then you can mention that the Team can make Token purchases after that week's clear is finished.
     """
-    team = fetch_single_savage_aim_team_details.invoke({'team_id': team_id, 'api_key': api_key})
+    team = fetch_team_details.invoke({'team_id': team_id, 'api_key': api_key})
     headers = {'Authorization': f'Token {api_key}'}
     response = requests.get(f'https://savageaim.com/backend/api/team/{team_id}/loot/solver/', headers=headers)
     if response.status_code != 200:
